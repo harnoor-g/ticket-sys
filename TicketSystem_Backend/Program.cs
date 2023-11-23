@@ -9,7 +9,7 @@ string frontendPolicyName = "FrontendPolicy";
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<TicketContext>(options => options.UseInMemoryDatabase("TicketList"));
+builder.Services.AddDbContext<TicketContext>(options => options.UseSqlServer("name=ConnectionStrings:DbConnection"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

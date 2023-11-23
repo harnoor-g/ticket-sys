@@ -11,35 +11,35 @@ namespace TicketSystem_Backend.Controllers
 {
     [Route("api/tickets")]
     [ApiController]
-    public class TicketController : ControllerBase
+    public class TicketsController : ControllerBase
     {
         private readonly TicketContext _context;
 
-        public TicketController(TicketContext context)
+        public TicketsController(TicketContext context)
         {
             _context = context;
         }
 
-        // GET: api/tickets
+        // GET: api/Tickets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ticket>>> GetTicketSet()
+        public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
-          if (_context.TicketSet == null)
+          if (_context.Tickets == null)
           {
               return NotFound();
           }
-            return await _context.TicketSet.ToListAsync();
+            return await _context.Tickets.ToListAsync();
         }
 
-        // GET: api/tickets/5
+        // GET: api/Tickets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
-          if (_context.TicketSet == null)
+          if (_context.Tickets == null)
           {
               return NotFound();
           }
-            var ticket = await _context.TicketSet.FindAsync(id);
+            var ticket = await _context.Tickets.FindAsync(id);
 
             if (ticket == null)
             {
@@ -49,17 +49,24 @@ namespace TicketSystem_Backend.Controllers
             return ticket;
         }
 
-        // PUT: api/tickets/5
+        // PUT: api/Tickets/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTicket(int id, Ticket ticket)
+        public async Task<IActionResult> PutTicket(int id, TicketDTO ticketDTO)
         {
-            if (id != ticket.Id)
+            if (id != ticketDTO.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(ticket).State = EntityState.Modified;
+            Ticket? ticket = await _context.Tickets.FindAsync(ticketDTO.Id);
+            
+            if (ticket != null)
+            {
+                ticket.UpdatedDate = DateTime.UtcNow;
+            }
+
+            _context.Entry(ticketDTO).State = EntityState.Modified;
 
             try
             {
@@ -80,36 +87,46 @@ namespace TicketSystem_Backend.Controllers
             return NoContent();
         }
 
-        // POST: api/tickets
+        // POST: api/Tickets
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Ticket>> PostTicket(Ticket ticket)
+        public async Task<ActionResult<Ticket>> PostTicket(TicketDTO ticketDTO)
         {
-          if (_context.TicketSet == null)
-          {
-              return Problem("Entity set 'TicketContext.TicketSet'  is null.");
-          }
-            _context.TicketSet.Add(ticket);
+            if (_context.Tickets == null)
+            {
+                return Problem("Entity set 'TicketContext.Tickets'  is null.");
+            }
+
+            Ticket ticket = new()
+            {
+                Title = ticketDTO.Title,
+                Content = ticketDTO.Content,
+                Status = ticketDTO.Status,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow,
+            };
+
+            _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
         }
 
-        // DELETE: api/tickets/5
+        // DELETE: api/Tickets/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTicket(int id)
         {
-            if (_context.TicketSet == null)
+            if (_context.Tickets == null)
             {
                 return NotFound();
             }
-            var ticket = await _context.TicketSet.FindAsync(id);
+            var ticket = await _context.Tickets.FindAsync(id);
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            _context.TicketSet.Remove(ticket);
+            _context.Tickets.Remove(ticket);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -117,7 +134,7 @@ namespace TicketSystem_Backend.Controllers
 
         private bool TicketExists(int id)
         {
-            return (_context.TicketSet?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Tickets?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
