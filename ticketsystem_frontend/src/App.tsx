@@ -1,13 +1,18 @@
 import './App.css';
-import GetTickets from './components/GetTickets';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import TicketDashboard from './components/TicketDashboard';
+
+
+const theme = createTheme();
 
 function App() {
     return (
-        <div>
-            <header>
-                <GetTickets />
-            </header>
-        </div>
+        <ThemeProvider theme={theme}>
+            <Box>
+                <TicketDashboard/>
+            </Box>
+        </ThemeProvider>
     );
 }
 
