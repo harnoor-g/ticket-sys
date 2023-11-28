@@ -10,10 +10,20 @@ interface Ticket {
     updatedDate: string,
 }
 
+interface statusDict {
+    [key: number]: string,
+}
+
+const statusOptions: statusDict = { 0: 'To Do', 1: 'In Progress', 2: 'Done' };
+
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'Ticket #', type: 'number', width: 70 },
     { field: 'title', headerName: 'Summary', flex: 1 },
-    { field: 'status', headerName: 'Status', type: 'number', flex: 1 },
+    {
+        field: 'status', headerName: 'Status', type: 'number', flex: 1, renderCell: (params) => {
+            return <>{statusOptions[params.row.status]}</>
+        }
+    },
     { field: 'createdDate', headerName: 'Created', flex: 1 },
     { field: 'updatedDate', headerName: 'Last Updated', flex: 1 },
 ]
