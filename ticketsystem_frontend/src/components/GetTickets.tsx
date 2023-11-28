@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 interface Ticket {
     id: number,
@@ -15,8 +10,15 @@ interface Ticket {
     updatedDate: string,
 }
 
+const columns: GridColDef[] = [
+    { field: 'id', headerName: 'Ticket #', type: 'number', width: 70 },
+    { field: 'title', headerName: 'Summary', flex: 1 },
+    { field: 'status', headerName: 'Status', type: 'number', flex: 1 },
+    { field: 'createdDate', headerName: 'Created', flex: 1 },
+    { field: 'updatedDate', headerName: 'Last Updated', flex: 1 },
+]
 
-function GetTickets() {
+export default function GetTickets() {
     const [ticketData, setTicketData] = useState<Ticket[] | null>(null);
 
     useEffect(() => {
@@ -59,30 +61,19 @@ function GetTickets() {
 
     return (
         <div>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Ticket #</TableCell>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Created</TableCell>
-                        <TableCell>Last Updated</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {ticketData?.map((ticket, index) => (
-                        <TableRow key={ index }>
-                            <TableCell>{ticket.id}</TableCell>
-                            <TableCell>{ticket.title}</TableCell>
-                            <TableCell>{ticket.status}</TableCell>
-                            <TableCell>{ticket.createdDate}</TableCell>
-                            <TableCell>{ticket.updatedDate}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <DataGrid
+                rows={ticketData}
+                columns={columns}
+                initialState={{
+                    pagination: {
+                        paginationModel: { page: 0, pageSize: 15 },
+                    },
+                }}
+                pageSizeOptions={[15, 20, 30, 50]}
+                checkboxSelection
+                getRowId={(row) => row.id}
+
+            />
         </div>
     );
 }
-
-export default GetTickets;
