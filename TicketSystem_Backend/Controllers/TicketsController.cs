@@ -63,10 +63,12 @@ namespace TicketSystem_Backend.Controllers
             
             if (ticket != null)
             {
+                ticket.Title = ticketDTO.Title;
+                ticket.Content = ticketDTO.Content;
+                ticket.Status = ticketDTO.Status;
                 ticket.UpdatedDate = DateTime.UtcNow;
+                _context.Entry(ticket).State = EntityState.Modified;
             }
-
-            _context.Entry(ticketDTO).State = EntityState.Modified;
 
             try
             {
