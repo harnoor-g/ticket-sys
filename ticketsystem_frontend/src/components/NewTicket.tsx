@@ -1,34 +1,27 @@
 import { Autocomplete, Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useMemo, useState } from 'react';
 import { TicketData, TicketStatus, getEnumValue, getStatusLabel } from '../types/ticketTypes';
 import { createTicket } from '../services/ticketServices';
 
 
 interface FormProps {
-    showCard: boolean,
     onClose: () => void,
 }
 
-interface TicketData {
-    title: string,
-    content: string,
-    status: number,
-}
-
-interface statusDict {
-    [key: string]: number,
-}
-
-const statusOptions: statusDict = { 'To Do': 0, 'In Progress' : 1, 'Done' : 2 };
-
-export default function NewTicket({ showCard, onClose }: FormProps) {
+export default function NewTicket({ onClose }: FormProps) {
     const [formData, setFormData] = useState<TicketData>({
         title: '',
         content: '',
-        status: 0,
+        status: TicketStatus.ToDo,
     });
-    const optionsArr = Object.keys(statusOptions);
-    const [optionsValue, setOptionsValue] = useState<string | null>(optionsArr[0]);
+
+    const optionsArr = useMemo(() => {
+        return Object.values(TicketStatus)
+            .filter(status => typeof status === 'number')
+            .map(status => getStatusLabel(status));
+    }, []);
+
+    const [optionsValue, setOptionsValue] = useState<string | null>(null);
 
     const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -44,7 +37,6 @@ export default function NewTicket({ showCard, onClose }: FormProps) {
         createTicket(formData);
         onClose();
     };
-
 
     return (
         <Box sx={{
@@ -90,8 +82,8 @@ export default function NewTicket({ showCard, onClose }: FormProps) {
                         </Grid>
                         <Grid item xs={12}>
                             <Autocomplete
-                                value={optionsValue}
-                                onChange={(event: any, newValue: string | null) => {
+                            value={optionsValue}
+                            onChange={(event: any, newValue: string | null) => {
                                     setOptionsValue(newValue);
                                 }}
                                 options={optionsArr}
