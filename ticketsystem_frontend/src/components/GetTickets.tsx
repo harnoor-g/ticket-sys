@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Ticket, getStatusLabel } from '../types/ticketTypes';
+import { fetchTickets } from '../services/ticketServices';
 
 interface Ticket {
     id: number,
@@ -34,31 +35,9 @@ export default function GetTickets() {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const response = await fetch('https://localhost:7278/api/tickets', {
-                    method: 'GET',
-                    headers: {
-                        Accept: 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error! status: ${response.status}`);
-                }
-
-                const jsonData = (await response.json()) as Ticket[];
-                setTicketData(jsonData);
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.log('error message: ', error.message);
-                    return error.message;
-                } else {
-                    console.log('unexpexted error: ', error);
-                    return 'An unexpected error occurred';
-                }
+            const data = await fetchTickets();
+            setTicketData(data);
             }
-        };
-
         fetchData();
     }, []);
 

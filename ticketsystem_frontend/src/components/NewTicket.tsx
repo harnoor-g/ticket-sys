@@ -1,6 +1,7 @@
 import { Autocomplete, Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { TicketData, TicketStatus, getEnumValue, getStatusLabel } from '../types/ticketTypes';
+import { createTicket } from '../services/ticketServices';
 
 
 interface FormProps {
@@ -39,29 +40,8 @@ export default function NewTicket({ showCard, onClose }: FormProps) {
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
-        formData.status = statusOptions[optionsValue === null ? 'To Do' : optionsValue];
-        try {
-            const response = await fetch('https://localhost:7278/api/tickets', {
-                method: 'POST',
-                body: JSON.stringify(formData),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error! status: ${response.status}`);
-            }
-
-        } catch (error) {
-            if (error instanceof Error) {
-                console.log('error message: ', error.message);
-                return error.message;
-            } else {
-                console.log('unexpexted error: ', error);
-                return 'An unexpected error occurred';
-            }
-        }
+        formData.status = getEnumValue(optionsValue);
+        createTicket(formData);
         onClose();
     };
 
