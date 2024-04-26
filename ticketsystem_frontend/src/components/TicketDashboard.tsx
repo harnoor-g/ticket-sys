@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import GetTickets from './GetTickets';
 import NewTicket from './NewTicket';
 import { DashboardStateContext } from '../context/DashboardContext';
+import { AlertInfo, AlertType, DialogInfo } from '../types/ticketTypes';
 
 
 

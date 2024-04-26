@@ -1,5 +1,6 @@
 import { Autocomplete, Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { TicketData, TicketStatus, getEnumValue, getStatusLabel } from '../types/ticketTypes';
 
 
 interface FormProps {
