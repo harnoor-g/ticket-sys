@@ -6,7 +6,6 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.18",
-    "@mui/styles": "^5.14.18",
     "@mui/x-data-grid": "^6.18.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -18,7 +17,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -26,12 +24,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -46,7 +38,11 @@
     ]
   },
   "devDependencies": {
-    "eslint-config-react-app": "^7.0.1",
-    "jest-editor-support": "^31.1.2"
+    "@babel/plugin-proposal-private-property-in-object": "",
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "jest-editor-support": "^31.1.2",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.7.0"
   }
 }
