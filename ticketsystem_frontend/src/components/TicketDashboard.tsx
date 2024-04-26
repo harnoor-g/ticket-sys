@@ -2,10 +2,12 @@ import { Box, Button, Grid, Paper } from '@mui/material';
 import React, { useState } from 'react';
 import GetTickets from './GetTickets';
 import NewTicket from './NewTicket';
+import { DashboardStateContext } from '../context/DashboardContext';
 
 
 
 export default function TicketDashboard() {
+    const { isEditBtnDisabled, setEditBtnDisabled, isDeleteBtnDisabled, setDeleteBtnDisabled, showAlert, setShowAlert, showDialog, setShowDialog } = useContext(DashboardStateContext);
     const [showNewTicketCard, setShowNewTicketCard] = useState(false);
 
     return (
